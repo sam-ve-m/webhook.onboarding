@@ -1,5 +1,6 @@
 # STANDARD IMPORTS
 from http import HTTPStatus
+from aioflask import Flask
 from flask import request, Response, Request
 
 # THIRD PART IMPORTS
@@ -10,7 +11,11 @@ from func.src.domain.enums.status_code.enum import InternalCode
 from func.src.domain.models.response.model import ResponseModel
 
 
-async def update_exchange_member(request: Request = request) -> Response:
+app = Flask(__name__)
+
+
+@app.route('/put/update_exchange_account')
+async def update_exchange_account_information(request: Request = request) -> Response:
 
     try:
         # exchange_member = ExchangeMemberRequest(**request_body.json)
@@ -25,7 +30,7 @@ async def update_exchange_member(request: Request = request) -> Response:
         response = ResponseModel(
             success=True,
             code=InternalCode.SUCCESS,
-            message="The Broker Member US Data Was Successfully Updated",
+            message="Data Was Successfully Updated",
             result=service_response
         ).build_http_response(status=HTTPStatus.OK)
         return response
@@ -39,3 +44,6 @@ async def update_exchange_member(request: Request = request) -> Response:
             message="Unexpected error occurred"
         ).build_http_response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
         return response
+
+if __name__ == "__main__":
+    app.run(debug=True)
