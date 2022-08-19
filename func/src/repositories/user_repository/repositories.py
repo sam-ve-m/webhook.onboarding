@@ -1,6 +1,4 @@
 # STANDARD IMPORTS
-from typing import Any
-
 from decouple import config
 
 # THIRD PART IMPORTS
@@ -36,7 +34,11 @@ class UserRepository:
             raise ex
 
     @classmethod
-    async def update_ouroinvest_information(cls, exchange_account: dict, status: str, user_filter: dict):
+    async def update_ouroinvest_information(
+            cls,
+            exchange_account: dict,
+            status: str,
+            user_filter: dict):
 
         exchange_account_information = {
             "$set": {

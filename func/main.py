@@ -31,7 +31,7 @@ async def update_exchange_account_information(request_body: Request = request) -
         response = ResponseModel(
             success=True,
             code=InternalCode.SUCCESS,
-            message="Data Was Successfully Updated",
+            message="SUCCESS - DATA WAS UPDTED SUCCESSFULLY",
             result=service_response
         ).build_http_response(status=HTTPStatus.OK)
         return response
@@ -42,7 +42,7 @@ async def update_exchange_account_information(request_body: Request = request) -
             result=False,
             success=False,
             code=InternalCode.USER_WAS_NOT_FOUND,
-            message="USER WAS NOT FOUND"
+            message="ERROR - USER WAS NOT FOUND"
         ).build_http_response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
         return response
 
@@ -52,7 +52,7 @@ async def update_exchange_account_information(request_body: Request = request) -
             result=False,
             success=False,
             code=InternalCode.CARONTE_TRANSPORT_ERROR,
-            message="ERROR ON FETCHING DATA FROM CARONTE TRANSPORT"
+            message="ERROR ON FETCHING DATA FROM CARONTE TRANSPORT:: Data from client was not found"
         ).build_http_response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
         return response
 
@@ -62,7 +62,7 @@ async def update_exchange_account_information(request_body: Request = request) -
             result=False,
             success=False,
             code=InternalCode.STATUS_SENT_IS_NOT_A_VALID_ENUM,
-            message="ERROR ON FETCHING DATA FROM CARONTE TRANSPORT"
+            message="ERROR - STATUS SENT IS NOT A VALID ENUM"
         ).build_http_response(status=HTTPStatus.BAD_REQUEST)
         return response
 
@@ -72,7 +72,7 @@ async def update_exchange_account_information(request_body: Request = request) -
             result=False,
             success=False,
             code=InternalCode.INTERNAL_SERVER_ERROR,
-            message="Unexpected error occurred"
+            message="ERROR - AN UNEXPECTED ERROR HAS OCCURRED"
         ).build_http_response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
         return response
 

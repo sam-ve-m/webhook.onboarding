@@ -1,4 +1,5 @@
 # PROJECT IMPORTS
+from func.src.domain.exceptions.exceptions import UserWasNotFound
 from func.src.domain.models.web_hook.model import ClientDataRequest
 from func.src.domain.validator.status_ouroinvest.validator import CheckIfEnumStatusIsValid
 from func.src.repositories.user_repository.repositories import UserRepository
@@ -28,5 +29,8 @@ class UpdateOuroInvestInformation:
         )
 
         # Todo - cobrar Marcão sobre o log no Iara
+
+        if was_updated is False:
+            raise UserWasNotFound
 
         return was_updated

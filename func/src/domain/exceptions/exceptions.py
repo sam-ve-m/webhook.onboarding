@@ -1,5 +1,6 @@
 class CaronteTransportError(Exception):
-    msg = "Jormungandr-OuroInvest:Webhook::CaronteTransport.get_user_register::error on fetching data from Caronte"
+    msg = "Jormungandr-OuroInvest:Webhook::CaronteTransport.get_user_register::error on fetching data from Caronte" \
+          "Não existe cliente para a inscrição informada"
 
 
 class UserWasNotFound(Exception):
