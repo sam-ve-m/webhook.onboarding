@@ -13,3 +13,7 @@ class UserWasNotUpdated(Exception):
 
 class StatusSentIsNotValid(Exception):
     msg = "CheckIfEnumStatusIsValid.check_if_enum_is_valid:: this is not a valid enum"
+
+
+class NotSentToPersephone(Exception):
+    msg = "UpdateMarketTimeExperience.update_market_time_experience::sent_to_persephone:: the data was not sent to persephone"

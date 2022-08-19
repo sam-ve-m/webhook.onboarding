@@ -29,3 +29,11 @@ web_hook_fourth_response = {
   "codigoCorrespondente": 1223,
   "mensagem": "{\"inscricao\":\"931.093.350-00\",\"statusCadastro\":\"Concluído\",\"perfilCadastro\":\"Eventual\",\"dataEvento\":\"2022-08-18T12:53:04.838Z\",\"codigoCliente\":208647,\"conta\":188228,\"iban\":\"BR4078632767000010001882287C1\",\"codigoCorrespondente\":\"1223\"}"
 }
+
+web_hook_fourth_response_invalid = {
+  "tipoWebhook": {
+    "Codigo": 1
+  },
+  "codigoCorrespondente": 1223,
+  "mensagem": "{\"inscricao\":\"931.093.350-00\",\"statusCadastro\":\"EM ANDAMENTO\",\"perfilCadastro\":\"Eventual\",\"dataEvento\":\"2022-08-18T12:53:04.838Z\",\"codigoCliente\":208647,\"conta\":188228,\"iban\":\"BR4078632767000010001882287C1\",\"codigoCorrespondente\":\"1223\"}"
+}

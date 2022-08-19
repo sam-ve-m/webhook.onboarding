@@ -17,8 +17,8 @@ from func.src.services.web_hook.service import UpdateOuroInvestInformation
 app = Flask(__name__)
 
 
-@app.route('/put/save_exchange_account')
-async def update_exchange_account_information(request_body: Request = request) -> Response:
+@app.route('/put/webhook_ouroinvest')
+async def update_exc(request_body: Request = request) -> Response:
     hook_request = request_body.json
 
     try:

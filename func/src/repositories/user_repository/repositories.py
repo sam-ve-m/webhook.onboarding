@@ -76,8 +76,6 @@ class UserRepository:
 
             return response
 
-            # create log on persephone here
-
         except UserWasNotFound as ex:
             Gladsheim.error(
                 error=ex,

@@ -2,3 +2,4 @@
 ../caronte.lionx.com.br/dist/caronte-0.0.0.tar.gz
 Flask==2.1.2
 etria-logger==0.1.8
+persephone-client==1.5.0
