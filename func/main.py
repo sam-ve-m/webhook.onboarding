@@ -17,7 +17,7 @@ from func.src.services.web_hook.service import UpdateOuroInvestInformation
 app = Flask(__name__)
 
 
-@app.route('/put/webhook_ouroinvest')
+@app.route('/put/onboarding_ouroinvest')
 async def update_exc(request_body: Request = request) -> Response:
     hook_request = request_body.json
 
@@ -31,7 +31,7 @@ async def update_exc(request_body: Request = request) -> Response:
         response = ResponseModel(
             success=True,
             code=InternalCode.SUCCESS,
-            message="SUCCESS - DATA WAS UPDTED SUCCESSFULLY",
+            message="SUCCESS - DATA WAS UPDATED SUCCESSFULLY",
             result=service_response
         ).build_http_response(status=HTTPStatus.OK)
         return response

@@ -3,6 +3,7 @@ from func.src.domain.exceptions.exceptions import UserWasNotFound
 from func.src.domain.models.web_hook.model import ClientDataRequest
 from func.src.domain.validator.status_ouroinvest.validator import CheckIfEnumStatusIsValid
 from func.src.repositories.user_repository.repositories import UserRepository
+from func.src.services.persephone.service import SendToPersephone
 from func.src.transport.caronte.transport import CaronteTransport
 
 
@@ -15,6 +16,7 @@ class UpdateOuroInvestInformation:
     ) -> bool:
 
         status, cpf = client_data.get_message_and_cpf()
+        unique_id = await UserRepository.find_client_unique_id(cpf=cpf)
 
         CheckIfEnumStatusIsValid.check_if_enum_is_valid(status=status)
 
@@ -22,13 +24,18 @@ class UpdateOuroInvestInformation:
             cpf=cpf
         )
 
+        await SendToPersephone.register_user_exchange_member_log(
+            cpf=client_data.get_cpf_from_message_without_maskara(),
+            status=client_data.get_client_ouroinvest_status(),
+            exchange_account=exchange_account,
+            unique_id=unique_id
+        )
+
         was_updated = await UserRepository.update_ouroinvest_user_exchange_account(
             status=status,
             cpf=cpf,
             exchange_account=exchange_account
         )
-
-        # Todo - cobrar Marcão sobre o log no Iara
 
         if was_updated is False:
             raise UserWasNotFound

@@ -4,14 +4,9 @@ from etria_logger import Gladsheim
 from persephone_client import Persephone
 
 # PROJECT IMPORTS
-
-
-
-# Persephone
-# unique_id, status, exchange_account, cpf
-# topico - sphinx-persephone.user.crud
-# 1.5.0
+from func.src.domain.enums.persephone_queue.enum import PersephoneQueue
 from func.src.domain.exceptions.exceptions import NotSentToPersephone
+from func.src.domain.models.persephone.model import LogOuroInvestToPersephone
 
 
 class SendToPersephone:
@@ -29,15 +24,15 @@ class SendToPersephone:
             sent_to_persephone,
             status_sent_to_persephone,
         ) = await Persephone.send_to_persephone(
-            topic="sphinx-persephone.user.crud",
-            partition=0,
-            message=ExchangeMemberToPersephone.exchange_member_schema(
+            topic=config("PERSEPHONE_TOPIC"),
+            partition=PersephoneQueue.OUROINVEST_ONBOARDING,
+            message=LogOuroInvestToPersephone.ouroinvest_schema_message(
                 unique_id=unique_id,
                 status=status,
                 cpf=cpf,
                 exchange_account=exchange_account
             ),
-            schema_name="to_be_informed",
+            schema_name=config("PERSEPHONE_SCHEMA"),
         )
         if sent_to_persephone is False:
             Gladsheim.error(

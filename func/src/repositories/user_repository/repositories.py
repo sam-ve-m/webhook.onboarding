@@ -34,28 +34,33 @@ class UserRepository:
             raise ex
 
     @classmethod
-    async def update_ouroinvest_information(
+    async def find_client_unique_id(
             cls,
-            exchange_account: dict,
-            status: str,
-            user_filter: dict):
+            cpf: str
+    ):
+        user_filter = {"identifier_document.cpf": cpf}
 
-        exchange_account_information = {
-            "$set": {
-                "ouro_invest.account": exchange_account,
-                "ouro_invest.status": status
-            }
-        }
+        try:
+            collection = await cls.__get_collection()
+            client_data = await collection.find_one(
+                user_filter
+            )
 
-        collection = await cls.__get_collection()
-        was_updated = await collection.update_one(
-            user_filter, exchange_account_information
-        )
+            unique_id = client_data.get("unique_id")
 
-        if not was_updated.matched_count == 1:
-            raise UserWasNotFound
+            if not unique_id:
+                raise UserWasNotFound
 
-        return bool(was_updated)
+            return unique_id
+
+        except UserWasNotFound as ex:
+            Gladsheim.error(
+                error=ex,
+                message="UserRepository.find_client_unique_id::"
+                        "Failed to find user unique_id from database",
+                query=user_filter,
+            )
+            return False
 
     @classmethod
     async def update_ouroinvest_user_exchange_account(
@@ -68,13 +73,22 @@ class UserRepository:
         user_filter = {"identifier_document.cpf": cpf}
 
         try:
-            response = await cls.update_ouroinvest_information(
-                exchange_account=exchange_account,
-                status=status,
-                user_filter=user_filter
+            exchange_account_information = {
+                "$set": {
+                    "ouro_invest.account": exchange_account,
+                    "ouro_invest.status": status
+                }
+            }
+
+            collection = await cls.__get_collection()
+            was_updated = await collection.update_one(
+                user_filter, exchange_account_information
             )
 
-            return response
+            if not was_updated.matched_count == 1:
+                raise UserWasNotFound
+
+            return bool(was_updated)
 
         except UserWasNotFound as ex:
             Gladsheim.error(

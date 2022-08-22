@@ -16,4 +16,4 @@ class StatusSentIsNotValid(Exception):
 
 
 class NotSentToPersephone(Exception):
-    msg = "UpdateMarketTimeExperience.update_market_time_experience::sent_to_persephone:: the data was not sent to persephone"
+    msg = "UpdateMarketTimeExperience.update_market_time_experience::sent_to_persephone:: the data was not sent to persephone_queue"
