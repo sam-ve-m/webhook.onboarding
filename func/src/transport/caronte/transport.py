@@ -1,4 +1,5 @@
 # STANDARD IMPORTS
+import asyncio
 from decouple import config
 
 # THIRD PART IMPORTS

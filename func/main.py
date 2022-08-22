@@ -18,7 +18,7 @@ app = Flask(__name__)
 
 
 @app.route('/put/onboarding_ouroinvest')
-async def update_exc(request_body: Request = request) -> Response:
+async def update_onboarding_ouroinvest(request_body: Request = request) -> Response:
     hook_request = request_body.json
 
     try:
