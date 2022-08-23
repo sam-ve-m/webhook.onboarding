@@ -4,9 +4,9 @@ from etria_logger import Gladsheim
 from persephone_client import Persephone
 
 # PROJECT IMPORTS
-from func.src.domain.enums.persephone_queue.enum import PersephoneQueue
-from func.src.domain.exceptions.exceptions import NotSentToPersephone
-from func.src.domain.models.persephone.model import LogOuroInvestToPersephone
+from src.domain.enums.persephone_queue.enum import PersephoneQueue
+from src.domain.exceptions.exceptions import NotSentToPersephone
+from src.domain.models.persephone.model import LogOuroInvestToPersephone
 
 
 class SendToPersephone:
@@ -25,7 +25,7 @@ class SendToPersephone:
             status_sent_to_persephone,
         ) = await Persephone.send_to_persephone(
             topic=config("PERSEPHONE_TOPIC"),
-            partition=PersephoneQueue.OUROINVEST_ONBOARDING,
+            partition=PersephoneQueue.OUROINVEST_ONBOARDING.value,
             message=LogOuroInvestToPersephone.ouroinvest_schema_message(
                 unique_id=unique_id,
                 status=status,

@@ -1,10 +1,10 @@
 # PROJECT IMPORTS
-from func.src.domain.exceptions.exceptions import UserWasNotFound
-from func.src.domain.models.web_hook.model import ClientDataRequest
-from func.src.domain.validator.status_ouroinvest.validator import CheckIfEnumStatusIsValid
-from func.src.repositories.user_repository.repositories import UserRepository
-from func.src.services.persephone.service import SendToPersephone
-from func.src.transport.caronte.transport import CaronteTransport
+from src.domain.exceptions.exceptions import UserWasNotFound
+from src.domain.models.web_hook.model import ClientDataRequest
+from src.domain.validator.status_ouroinvest.validator import CheckIfEnumStatusIsValid
+from src.repositories.user_repository.repositories import UserRepository
+from src.services.persephone.service import SendToPersephone
+from src.transport.caronte.transport import CaronteTransport
 
 
 class UpdateOuroInvestInformation:

@@ -7,8 +7,8 @@ from flask import Flask
 from func.src.repositories.user_repository.repositories import UserRepository
 from func.src.transport.caronte.transport import CaronteTransport
 from func.src.services.persephone.service import SendToPersephone
-from main import update_onboarding_ouroinvest
-from web_hook import web_hook_third_response
+from func.main import update_onboarding_ouroinvest
+from tests.web_hook import web_hook_third_response
 
 
 @pytest.mark.asyncio

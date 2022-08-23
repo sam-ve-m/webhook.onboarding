@@ -1,5 +1,4 @@
 # STANDARD IMPORTS
-import asyncio
 from decouple import config
 
 # THIRD PART IMPORTS
@@ -7,7 +6,7 @@ from caronte import OuroInvestApiTransport
 from etria_logger import Gladsheim
 
 # PROJECT IMPORTS
-from func.src.domain.exceptions.exceptions import CaronteTransportError
+from src.domain.exceptions.exceptions import CaronteTransportError
 
 
 class CaronteTransport:

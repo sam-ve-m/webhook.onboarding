@@ -7,11 +7,11 @@ from flask import request, Response, Request
 from etria_logger import Gladsheim
 
 # PROJECT IMPORTS
-from func.src.domain.enums.status_code.enum import InternalCode
-from func.src.domain.exceptions.exceptions import UserWasNotFound, CaronteTransportError, StatusSentIsNotValid
-from func.src.domain.models.response.model import ResponseModel
-from func.src.domain.models.web_hook.model import ClientDataRequest
-from func.src.services.web_hook.service import UpdateOuroInvestInformation
+from src.domain.enums.status_code.enum import InternalCode
+from src.domain.exceptions.exceptions import UserWasNotFound, CaronteTransportError, StatusSentIsNotValid
+from src.domain.models.response.model import ResponseModel
+from src.domain.models.web_hook.model import ClientDataRequest
+from src.services.web_hook.service import UpdateOuroInvestInformation
 
 
 app = Flask(__name__)

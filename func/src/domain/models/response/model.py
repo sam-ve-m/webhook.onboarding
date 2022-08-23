@@ -6,7 +6,7 @@ from flask import Response
 from nidavellir import Sindri
 
 # PROJECT IMPORTS
-from func.src.domain.enums.status_code.enum import InternalCode
+from src.domain.enums.status_code.enum import InternalCode
 
 
 class ResponseModel:

@@ -1,6 +1,6 @@
 # PROJECT IMPORTS
-from func.src.domain.enums.ouroinvest_status.enum import OuroInvestStatus
-from func.src.domain.exceptions.exceptions import StatusSentIsNotValid
+from src.domain.enums.ouroinvest_status.enum import OuroInvestStatus
+from src.domain.exceptions.exceptions import StatusSentIsNotValid
 
 
 class CheckIfEnumStatusIsValid:
