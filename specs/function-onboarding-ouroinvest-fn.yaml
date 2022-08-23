@@ -1,0 +1,55 @@
+include:
+- ./func/*
+kind: ArchiveUploadSpec
+name: func-9g1D
+
+---
+apiVersion: fission.io/v1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: onboarding-ouroinvest-fn-5bc32c8b-f94a-401c-88c6-93ce232be546
+  namespace: default
+spec:
+  deployment:
+    checksum: {}
+  environment:
+    name: onboarding-ouroinvest-env
+    namespace: default
+  source:
+    checksum: {}
+    type: url
+    url: archive://func-9g1D
+status:
+  buildstatus: pending
+  lastUpdateTimestamp: "2022-08-23T17:26:07Z"
+
+---
+apiVersion: fission.io/v1
+kind: Function
+metadata:
+  creationTimestamp: null
+  name: onboarding-ouroinvest-fn
+  namespace: default
+spec:
+  InvokeStrategy:
+    ExecutionStrategy:
+      ExecutorType: newdeploy
+      MaxScale: 1
+      MinScale: 1
+      SpecializationTimeout: 120
+      TargetCPUPercent: 80
+    StrategyType: execution
+  concurrency: 500
+  environment:
+    name: onboarding-ouroinvest-env
+    namespace: default
+  functionTimeout: 60
+  idletimeout: 120
+  package:
+    functionName: main.onboarding_ouroinvest
+    packageref:
+      name: onboarding-ouroinvest-fn-5bc32c8b-f94a-401c-88c6-93ce232be546
+      namespace: default
+  requestsPerPod: 1
+  resources: {}

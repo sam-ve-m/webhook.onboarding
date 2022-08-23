@@ -1,6 +1,5 @@
 # STANDARD IMPORTS
 from http import HTTPStatus
-from aioflask import Flask
 from flask import request, Response, Request
 
 # THIRD PART IMPORTS
@@ -14,11 +13,10 @@ from src.domain.models.web_hook.model import ClientDataRequest
 from src.services.web_hook.service import UpdateOuroInvestInformation
 
 
-app = Flask(__name__)
+async def onboarding_ouroinvest(
+        request_body: Request = request
+) -> Response:
 
-
-@app.route('/put/onboarding_ouroinvest')
-async def update_onboarding_ouroinvest(request_body: Request = request) -> Response:
     hook_request = request_body.json
 
     try:
@@ -44,6 +42,7 @@ async def update_onboarding_ouroinvest(request_body: Request = request) -> Respo
             code=InternalCode.USER_WAS_NOT_FOUND,
             message="ERROR - USER WAS NOT FOUND"
         ).build_http_response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
+
         return response
 
     except CaronteTransportError as error:
@@ -75,6 +74,3 @@ async def update_onboarding_ouroinvest(request_body: Request = request) -> Respo
             message="ERROR - AN UNEXPECTED ERROR HAS OCCURRED"
         ).build_http_response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
         return response
-
-if __name__ == "__main__":
-    app.run(debug=True)
