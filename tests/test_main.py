@@ -4,7 +4,7 @@ import pytest
 from flask import Flask
 
 # STUB IMPORTS
-from func.main import update_onboarding_ouroinvest
+from main import onboarding_ouroinvest
 from tests.web_hook import web_hook_third_response
 
 unique_id_stub = "2d03cc0c-0f75-4483-ae52-a3fc61626182"
@@ -28,7 +28,7 @@ async def test_when_sending_right_params_to_update_onboarding_ouroinvest_then_re
     with app.test_request_context(
             json=web_hook_third_response,
     ).request as request:
-        response = await update_onboarding_ouroinvest(
+        response = await onboarding_ouroinvest(
             request_body=request
         )
         assert response.status_code == 200
@@ -52,7 +52,7 @@ async def test_when_sending_right_params_to_update_onboarding_ouroinvest_but_not
     with app.test_request_context(
             json=web_hook_third_response,
     ).request as request:
-        response = await update_onboarding_ouroinvest(
+        response = await onboarding_ouroinvest(
             request_body=request
         )
         assert response.status_code == 500
