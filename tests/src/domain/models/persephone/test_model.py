@@ -5,8 +5,13 @@ import pytest
 from src.domain.models.persephone.model import LogOuroInvestToPersephone
 
 # STUB IMPORTS
-from tests.src.domain.models.persephone.file_stub import exchange_account_stub, cpf_stub, status_stub, unique_id, \
+from tests.src.domain.models.persephone.file_stub import (
+    exchange_account_stub,
+    cpf_stub,
+    status_stub,
+    unique_id,
     stub_response
+)
 
 
 def test_when_sending_right_params_to_ouroinvest_schema_message():
