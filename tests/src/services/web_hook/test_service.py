@@ -1,102 +1,70 @@
-# STANDARD IMPORTS
-from unittest.mock import patch
+# PROJECT IMPORTS
+from unittest.mock import patch, MagicMock
+
 import pytest
 
-# PROJECT IMPORTS
-from func.src.domain.exceptions.exceptions import UserWasNotFound, CaronteTransportError
-from func.src.domain.models.web_hook.model import ClientDataRequest
-from func.src.repositories.user_repository.repositories import UserRepository
-from func.src.services.web_hook.service import UpdateOuroInvestInformation
+from src.domain.exceptions.exceptions import UserWasNotFound, UserWasNotUpdated
+from src.repositories.user.repository import UserRepository
+from src.services.web_hook.service import ExchangeAccountService
+from src.transport.persephone.transport import SendToPersephone
+from src.transport.caronte.transport import CaronteTransport
 
-# STUBS
-from tests.api_response import api_response_stub
-from tests.web_hook import web_hook_fourth_response, web_hook_fourth_response_invalid
+
+dummy_webhook_message = MagicMock()
 
 
 @pytest.mark.asyncio
-@patch("src.transport.caronte.transport.CaronteTransport.get_user_register", return_value=api_response_stub)
-@patch(
-    "src.repositories.user_repository.repositories.UserRepository.find_client_unique_id",
-    return_value="2d03cc0c-0f75-4483-ae52-a3fc61626182"
-)
-@patch(
-    "src.repositories.user_repository.repositories.UserRepository.update_ouroinvest_user_exchange_account",
-    return_value=True
-)
-@patch("src.services.persephone.service.SendToPersephone.register_user_exchange_member_log", return_value=None)
-async def test_when_sending_right_params_to_update_ouroinvest_exchange_account_then_return_the_expected(
-        mock_register_user_exchange_member_log,
-        mock_update_ouroinvest_user_exchange_account,
-        mock_find_client_unique_id,
-        mock_get_user_register
-
+@patch.object(UserRepository, "find_client_unique_id", return_value=None)
+@patch.object(CaronteTransport, "get_exchange_account")
+@patch.object(SendToPersephone, "register_user_exchange_member_log")
+@patch.object(UserRepository, "update_exchange_account")
+async def test_save_exchange_account_without_updating(
+        mocked_update, mocked_persephone,
+        mocked_transport, mocked_repository
 ):
-    response = await UpdateOuroInvestInformation.update_ouroinvest_exchange_account(
-        client_data=ClientDataRequest(web_hook_fourth_response)
+    with pytest.raises(UserWasNotFound):
+        await ExchangeAccountService.save_exchange_account(dummy_webhook_message)
+    mocked_repository.assert_called_once_with(dummy_webhook_message.cpf)
+    mocked_persephone.assert_not_called()
+    mocked_transport.assert_not_called()
+    mocked_update.assert_not_called()
+
+
+@pytest.mark.asyncio
+@patch.object(UserRepository, "find_client_unique_id")
+@patch.object(CaronteTransport, "get_exchange_account")
+@patch.object(SendToPersephone, "register_user_exchange_member_log")
+@patch.object(UserRepository, "update_exchange_account", return_value=False)
+async def test_save_exchange_account_without_exchange_account(
+        mocked_update, mocked_persephone,
+        mocked_transport, mocked_repository
+):
+    with pytest.raises(UserWasNotUpdated):
+        await ExchangeAccountService.save_exchange_account(dummy_webhook_message)
+    mocked_repository.assert_called_once_with(dummy_webhook_message.cpf)
+    mocked_transport.assert_called_once_with(dummy_webhook_message)
+    mocked_persephone.assert_called_once_with(
+        exchange_account=mocked_transport.return_value,
+        unique_id=mocked_repository.return_value
     )
-    assert response is True
+    mocked_update.assert_called_once_with(mocked_transport.return_value)
 
 
 @pytest.mark.asyncio
-@patch(
-    "src.repositories.user_repository.repositories.UserRepository.find_client_unique_id",
-    return_value="2d03cc0c-0f75-4483-ae52-a3fc61626182"
-)
-async def test_when_sending_invalid_status_on_requisition_to_exchange_account_then_raise_status_sent_is_not_valid(
-        mock_find_client_unique_id
+@patch.object(UserRepository, "find_client_unique_id")
+@patch.object(CaronteTransport, "get_exchange_account")
+@patch.object(SendToPersephone, "register_user_exchange_member_log")
+@patch.object(UserRepository, "update_exchange_account")
+async def test_save_exchange_account(
+        mocked_update, mocked_persephone,
+        mocked_transport, mocked_repository
 ):
-    with pytest.raises(Exception):
-        await UpdateOuroInvestInformation.update_ouroinvest_exchange_account(
-            client_data=ClientDataRequest(web_hook_fourth_response_invalid)
-        )
-
-
-@pytest.mark.asyncio
-@patch.object(UserRepository, "find_client_unique_id", side_effect=UserWasNotFound)
-async def test_when_sending_invalid_cpf_then_raise_user_not_found_on_database_error(
-        mock_find_client_unique_id
-):
-    with pytest.raises(Exception):
-        await UpdateOuroInvestInformation.update_ouroinvest_exchange_account(
-            client_data=ClientDataRequest(web_hook_fourth_response_invalid)
-        )
-
-
-@pytest.mark.asyncio
-@patch("src.transport.caronte.transport.CaronteTransport.get_user_register", side_effect=CaronteTransportError)
-@patch("src.repositories.user_repository.repositories.UserRepository.find_client_unique_id", return_value="2d03cc0c-0f75-4483-ae52-a3fc61626182")
-@patch("src.services.persephone.service.SendToPersephone.register_user_exchange_member_log", return_value=None)
-async def test_when_caronte_transport_get_user_register_raised_an_error_then_raise_exception(
-        mock_get_user_register,
-        mock_find_client_unique_id,
-        mock_register_user_exchange_member_log
-
-):
-    with pytest.raises(Exception):
-        await UpdateOuroInvestInformation.update_ouroinvest_exchange_account(
-            client_data=ClientDataRequest(web_hook_fourth_response)
-        )
-
-
-@pytest.mark.asyncio
-@patch("src.transport.caronte.transport.CaronteTransport.get_user_register", return_value=api_response_stub)
-@patch(
-    "src.repositories.user_repository.repositories.UserRepository.find_client_unique_id",
-    return_value="2d03cc0c-0f75-4483-ae52-a3fc61626182"
-)
-@patch(
-    "src.repositories.user_repository.repositories.UserRepository.update_ouroinvest_user_exchange_account",
-    return_value=False
-)
-@patch("src.services.persephone.service.SendToPersephone.register_user_exchange_member_log", return_value=None)
-async def test_when_repository_did_not_update_client_data_then_raise_user_not_found_error(
-        mock_update_ouroinvest_user_exchange_account,
-        mock_get_user_register,
-        mock_register_user_exchange_member_log,
-        find_client_unique_id
-
-):
-    with pytest.raises(Exception):
-        await UpdateOuroInvestInformation.update_ouroinvest_exchange_account(
-            client_data=ClientDataRequest(web_hook_fourth_response)
-        )
+    response = await ExchangeAccountService.save_exchange_account(dummy_webhook_message)
+    mocked_repository.assert_called_once_with(dummy_webhook_message.cpf)
+    mocked_transport.assert_called_once_with(dummy_webhook_message)
+    mocked_persephone.assert_called_once_with(
+        exchange_account=mocked_transport.return_value,
+        unique_id=mocked_repository.return_value
+    )
+    mocked_update.assert_called_once_with(mocked_transport.return_value)
+    assert response == mocked_update.return_value

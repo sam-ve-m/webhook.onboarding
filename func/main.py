@@ -1,29 +1,25 @@
 # STANDARD IMPORTS
 from http import HTTPStatus
-from flask import request, Response, Request
+import flask
 
 # THIRD PART IMPORTS
 from etria_logger import Gladsheim
 
 # PROJECT IMPORTS
 from src.domain.enums.status_code.enum import InternalCode
-from src.domain.exceptions.exceptions import UserWasNotFound, CaronteTransportError, StatusSentIsNotValid
+from src.domain.exceptions.exceptions import UserWasNotFound, CaronteTransportError, StatusSentIsNotValid, \
+    UserWasNotUpdated
 from src.domain.models.response.model import ResponseModel
-from src.domain.models.web_hook.model import ClientDataRequest
-from src.services.web_hook.service import UpdateOuroInvestInformation
+from src.domain.validator.webhook.validator import WebHookMessage
+from src.services.web_hook.service import ExchangeAccountService
 
 
-async def onboarding_ouroinvest(
-        request_body: Request = request
-) -> Response:
-
-    hook_request = request_body.json
-
+async def onboarding_ouroinvest() -> flask.Response:
+    hook_request = flask.request.json
     try:
-        client_data = ClientDataRequest(request_body=hook_request)
-
-        service_response = await UpdateOuroInvestInformation.update_ouroinvest_exchange_account(
-            client_data=client_data
+        webhook_message = WebHookMessage.from_request(request_body=hook_request)
+        service_response = await ExchangeAccountService.save_exchange_account(
+            webhook_message=webhook_message
         )
 
         response = ResponseModel(
@@ -35,9 +31,8 @@ async def onboarding_ouroinvest(
         return response
 
     except UserWasNotFound as error:
-        Gladsheim.error(error=error)
+        Gladsheim.error(error=error, message=error.msg)
         response = ResponseModel(
-            result=False,
             success=False,
             code=InternalCode.USER_WAS_NOT_FOUND,
             message="ERROR - USER WAS NOT FOUND"
@@ -45,10 +40,19 @@ async def onboarding_ouroinvest(
 
         return response
 
-    except CaronteTransportError as error:
-        Gladsheim.error(error=error)
+    except UserWasNotUpdated as error:
+        Gladsheim.error(error=error, message=error.msg)
         response = ResponseModel(
-            result=False,
+            success=False,
+            code=InternalCode.USER_WAS_NOT_FOUND,
+            message="ERROR - USER WAS NOT UPDATED"
+        ).build_http_response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
+
+        return response
+
+    except CaronteTransportError as error:
+        Gladsheim.error(error=error, message=error.msg)
+        response = ResponseModel(
             success=False,
             code=InternalCode.CARONTE_TRANSPORT_ERROR,
             message="ERROR ON FETCHING DATA FROM CARONTE TRANSPORT:: Data from client was not found"
@@ -56,9 +60,8 @@ async def onboarding_ouroinvest(
         return response
 
     except StatusSentIsNotValid as error:
-        Gladsheim.error(error=error)
+        Gladsheim.error(error=error, message=error.msg)
         response = ResponseModel(
-            result=False,
             success=False,
             code=InternalCode.STATUS_SENT_IS_NOT_A_VALID_ENUM,
             message="ERROR - STATUS SENT IS NOT A VALID ENUM"
@@ -66,9 +69,8 @@ async def onboarding_ouroinvest(
         return response
 
     except Exception as error:
-        Gladsheim.error(error=error)
+        Gladsheim.error(error=error, message=str(error))
         response = ResponseModel(
-            result=False,
             success=False,
             code=InternalCode.INTERNAL_SERVER_ERROR,
             message="ERROR - AN UNEXPECTED ERROR HAS OCCURRED"
