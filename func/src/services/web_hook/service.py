@@ -1,9 +1,10 @@
 # PROJECT IMPORTS
+from src.domain.enums.ouroinvest_status.enum import OuroInvestStatus
 from src.domain.exceptions.exceptions import UserWasNotFound, UserWasNotUpdated
 from src.domain.validator.webhook.validator import WebHookMessage
 from src.repositories.user.repository import UserRepository
+from src.transport.iara.transport import IaraTransport
 from src.transport.persephone.transport import SendToPersephone
-from src.transport.caronte.transport import CaronteTransport
 
 
 class ExchangeAccountService:
@@ -13,14 +14,16 @@ class ExchangeAccountService:
         if not unique_id:
             raise UserWasNotFound
 
-        exchange_account = await CaronteTransport.get_exchange_account(webhook_message)
         await SendToPersephone.register_user_exchange_member_log(
-            exchange_account=exchange_account,
+            webhook_message=webhook_message,
             unique_id=unique_id
         )
 
-        was_updated = await UserRepository.update_exchange_account(exchange_account)
+        was_updated = await UserRepository.update_exchange_account_status(webhook_message)
         if was_updated is False:
             raise UserWasNotUpdated
+
+        if webhook_message.status == OuroInvestStatus.CONCLUIDO:
+            await IaraTransport.save_account_exchange(unique_id)
 
         return was_updated

@@ -1,7 +1,7 @@
 from decouple import config
 from etria_logger import Gladsheim
 
-from src.domain.models.exchange_account.model import ExchangeAccount
+from src.domain.validator.webhook.validator import WebHookMessage
 from src.infrastructure.mongo_db.infrastructure import MongoDBInfrastructure
 
 
@@ -36,17 +36,14 @@ class UserRepository:
         return unique_id
 
     @classmethod
-    async def update_exchange_account(cls, exchange_account: ExchangeAccount) -> bool:
-        user_filter = {"identifier_document.cpf": exchange_account.cpf}
-        exchange_account_information = {
-            "$set": {
-                "ouro_invest.account": exchange_account.account,
-                "ouro_invest.status": exchange_account.status
-            }
+    async def update_exchange_account_status(cls, webhook_message: WebHookMessage) -> bool:
+        user_filter = {"identifier_document.cpf": webhook_message.cpf}
+        webhook_message_information = {
+            "$set": {"ouro_invest.status": webhook_message.status.value}
         }
 
         collection = await cls.__get_collection()
         was_updated = await collection.update_one(
-            user_filter, exchange_account_information
+            user_filter, webhook_message_information
         )
         return was_updated.matched_count == 1

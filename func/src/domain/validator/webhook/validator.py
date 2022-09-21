@@ -8,15 +8,8 @@ from src.domain.exceptions.exceptions import StatusSentIsNotValid
 
 
 class WebHookMessage(BaseModel):
-    status: str
+    status: OuroInvestStatus
     cpf: str
-
-    @validator("status")
-    def validate_status(cls, status: str):
-        valid_status = [valid_status.value for valid_status in OuroInvestStatus]
-        if status not in valid_status:
-            raise StatusSentIsNotValid
-        return status
 
     @validator("cpf")
     def unmask_cpf(cls, cpf_raw: str):
@@ -29,3 +22,10 @@ class WebHookMessage(BaseModel):
         status = message.get("statusCadastro")
         cpf = message.get("inscricao")
         return cls(status=status, cpf=cpf)
+
+    def log_schema(self, unique_id: str) -> dict:
+        schema = {
+            "status": self.status,
+            "unique_id": unique_id,
+        }
+        return schema

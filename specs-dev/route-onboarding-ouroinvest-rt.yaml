@@ -14,10 +14,10 @@ spec:
   ingressconfig:
     annotations: null
     host: '*'
-    path: /ouroinvest/onboarding-ouroinvest
+    path: /webhook/ouroinvest/onboarding
     tls: ""
   method: ""
   methods:
-  - PUT
+  - POST
   prefix: ""
-  relativeurl: /ouroinvest/onboarding-ouroinvest
+  relativeurl: /webhook/ouroinvest/onboarding

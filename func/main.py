@@ -7,7 +7,7 @@ from etria_logger import Gladsheim
 
 # PROJECT IMPORTS
 from src.domain.enums.status_code.enum import InternalCode
-from src.domain.exceptions.exceptions import UserWasNotFound, CaronteTransportError, StatusSentIsNotValid, \
+from src.domain.exceptions.exceptions import UserWasNotFound, NotSentToIara, NotSentToPersephone, StatusSentIsNotValid, \
     UserWasNotUpdated
 from src.domain.models.response.model import ResponseModel
 from src.domain.validator.webhook.validator import WebHookMessage
@@ -50,12 +50,12 @@ async def onboarding_ouroinvest() -> flask.Response:
 
         return response
 
-    except CaronteTransportError as error:
+    except (NotSentToIara, NotSentToIara) as error:
         Gladsheim.error(error=error, message=error.msg)
         response = ResponseModel(
             success=False,
             code=InternalCode.CARONTE_TRANSPORT_ERROR,
-            message="ERROR ON FETCHING DATA FROM CARONTE TRANSPORT:: Data from client was not found"
+            message="ERROR ON FETCHING DATA FROM INTERN TRANSPORT:: Unable to redirect message"
         ).build_http_response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
         return response
 

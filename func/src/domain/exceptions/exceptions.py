@@ -1,8 +1,3 @@
-class CaronteTransportError(Exception):
-    msg = "Jormungandr-OuroInvest:Webhook::CaronteTransport.get_user_register::error on fetching data from Caronte" \
-          "Não existe cliente para a inscrição informada"
-
-
 class UserWasNotFound(Exception):
     msg = "Jormungandr-Onboarding::UserRepository::update_user_and_broker_member - user was not found"
 
@@ -17,3 +12,7 @@ class StatusSentIsNotValid(Exception):
 
 class NotSentToPersephone(Exception):
     msg = "UpdateMarketTimeExperience.update_market_time_experience::sent_to_persephone:: the data was not sent to persephone_queue"
+
+
+class NotSentToIara(Exception):
+    msg = "UpdateMarketTimeExperience.update_market_time_experience::sent_to_iara:: the data was not sent to iara"

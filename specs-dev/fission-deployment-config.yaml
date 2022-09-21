@@ -4,4 +4,4 @@
 apiVersion: fission.io/v1
 kind: DeploymentConfig
 name: webhook-ouroinvest-onboarding
-uid: 8f5a0ef6-6676-4559-8cb5-8d1ee9adf7d4
+uid: 33b72a3e-12a5-4b8c-8337-487b1148a056
