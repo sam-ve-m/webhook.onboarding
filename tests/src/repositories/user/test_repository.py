@@ -84,12 +84,11 @@ async def test_update_exchange_account_true(
     monkeypatch.setattr(UserRepository, "infra", fake_infra)
     fake_infra.get_client.return_value[dummy_env].__getitem__.return_value = fake_collection
     fake_collection.update_one.return_value.matched_count = matched
-    response = await UserRepository.update_exchange_account(stub_exchange_account)
+    response = await UserRepository.update_exchange_account_status(stub_exchange_account)
     fake_collection.update_one.assert_called_with(
         {"identifier_document.cpf": stub_exchange_account.cpf},
         {"$set": {
-            "ouro_invest.account": stub_exchange_account.account,
-            "ouro_invest.status": stub_exchange_account.status
+            "ouro_invest.status": stub_exchange_account.status.value
         }}
     )
     mocked_env.assert_called()

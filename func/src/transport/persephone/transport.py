@@ -28,4 +28,4 @@ class SendToPersephone:
                 message="SendToPersephone::register_user_exchange_member_log::Error on trying to register log",
                 status=sent_status,
             )
-            # raise NotSentToPersephone
+            raise NotSentToPersephone()

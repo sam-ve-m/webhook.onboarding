@@ -21,7 +21,7 @@ class ExchangeAccountService:
 
         was_updated = await UserRepository.update_exchange_account_status(webhook_message)
         if was_updated is False:
-            raise UserWasNotUpdated
+            raise UserWasNotUpdated()
 
         if webhook_message.status == OuroInvestStatus.CONCLUIDO:
             await IaraTransport.save_account_exchange(unique_id)

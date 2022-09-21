@@ -18,7 +18,8 @@ with patch.object(RepositoryEnv, "__init__", return_value=None):
                 from main import onboarding_ouroinvest
                 from src.domain.enums.status_code.enum import InternalCode
                 from src.domain.models.response.model import ResponseModel
-                from src.domain.exceptions.exceptions import UserWasNotFound, CaronteTransportError, StatusSentIsNotValid, UserWasNotUpdated
+                from src.domain.exceptions.exceptions import UserWasNotFound, StatusSentIsNotValid, UserWasNotUpdated, \
+                    NotSentToIara
                 from src.services.web_hook.service import ExchangeAccountService
 
 
@@ -36,19 +37,19 @@ user_was_not_updated_case = (
     "ERROR - USER WAS NOT UPDATED",
     HTTPStatus.INTERNAL_SERVER_ERROR
 )
-caronte_transport_error_case = (
-    CaronteTransportError(),
-    CaronteTransportError.msg,
-    InternalCode.CARONTE_TRANSPORT_ERROR,
-    "ERROR ON FETCHING DATA FROM CARONTE TRANSPORT:: Data from client was not found",
-    HTTPStatus.INTERNAL_SERVER_ERROR
-)
 status_sent_is_not_valid_case = (
     StatusSentIsNotValid(),
     StatusSentIsNotValid.msg,
     InternalCode.STATUS_SENT_IS_NOT_A_VALID_ENUM,
     "ERROR - STATUS SENT IS NOT A VALID ENUM",
     HTTPStatus.BAD_REQUEST
+)
+status_unable_to_redirect_message = (
+    NotSentToIara(),
+    NotSentToIara.msg,
+    InternalCode.INTERNAL_TRANSPORT_ERROR,
+    "ERROR ON FETCHING DATA FROM INTERN TRANSPORT:: Unable to redirect message",
+    HTTPStatus.INTERNAL_SERVER_ERROR
 )
 exception_case = (
     Exception("dummy"),
@@ -63,8 +64,8 @@ exception_case = (
 @pytest.mark.parametrize("exception,error_message,internal_status_code,response_message,response_status_code", [
     user_was_not_found_case,
     user_was_not_updated_case,
-    caronte_transport_error_case,
     status_sent_is_not_valid_case,
+    status_unable_to_redirect_message,
     exception_case,
 ])
 @patch.object(WebHookMessage, "from_request")

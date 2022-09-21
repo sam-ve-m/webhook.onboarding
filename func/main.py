@@ -50,11 +50,11 @@ async def onboarding_ouroinvest() -> flask.Response:
 
         return response
 
-    except (NotSentToIara, NotSentToIara) as error:
+    except (NotSentToIara, NotSentToPersephone) as error:
         Gladsheim.error(error=error, message=error.msg)
         response = ResponseModel(
             success=False,
-            code=InternalCode.CARONTE_TRANSPORT_ERROR,
+            code=InternalCode.INTERNAL_TRANSPORT_ERROR,
             message="ERROR ON FETCHING DATA FROM INTERN TRANSPORT:: Unable to redirect message"
         ).build_http_response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
         return response
