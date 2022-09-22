@@ -11,8 +11,8 @@ class StatusSentIsNotValid(Exception):
 
 
 class NotSentToPersephone(Exception):
-    msg = "UpdateMarketTimeExperience.update_market_time_experience::sent_to_persephone:: the data was not sent to persephone_queue"
+    msg = "UpdateOuroInvestInformation::update_ouroinvest_exchange_account::sent_to_persephone:: the data was not sent to persephone_queue"
 
 
 class NotSentToIara(Exception):
-    msg = "UpdateMarketTimeExperience.update_market_time_experience::sent_to_iara:: the data was not sent to iara"
+    msg = "UpdateOuroInvestInformation::update_ouroinvest_exchange_account::sent_to_iara:: the data was not sent to iara"

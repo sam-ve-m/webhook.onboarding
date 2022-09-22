@@ -4,7 +4,6 @@ from etria_logger import Gladsheim
 from persephone_client import Persephone
 
 # PROJECT IMPORTS
-from src.domain.enums.persephone_queue.enum import PersephoneQueue
 from src.domain.exceptions.exceptions import NotSentToPersephone
 from src.domain.validator.webhook.validator import WebHookMessage
 
@@ -19,7 +18,7 @@ class SendToPersephone:
         message = webhook_message.log_schema(unique_id)
         success, sent_status = await Persephone.send_to_persephone(
             topic=config("PERSEPHONE_TOPIC"),
-            partition=PersephoneQueue.OUROINVEST_ONBOARDING.value,
+            partition=int(config("PERSEPHONE_PARTITION")),
             message=message,
             schema_name=config("PERSEPHONE_SCHEMA"),
         )
