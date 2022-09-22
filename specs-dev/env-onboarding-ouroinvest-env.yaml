@@ -110,7 +110,7 @@ spec:
             - name: PERSEPHONE_TOPIC
               value: "sphinx-persephone.user.crud"
             - name: PERSEPHONE_PARTITION
-              value: "19"
+              value: "20"
             - name: PERSEPHONE_SCHEMA
               value: "user_exchange_account_status"
             - name: PERSEPHONE_KAFKA_BROKERS

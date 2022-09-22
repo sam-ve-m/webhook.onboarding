@@ -7,11 +7,10 @@ from etria_logger import Gladsheim
 from persephone_client import Persephone
 
 # PROJECT IMPORTS
-from src.domain.enums.persephone_queue.enum import PersephoneQueue
 from src.domain.exceptions.exceptions import NotSentToPersephone
 from src.transport.persephone.transport import SendToPersephone
 
-dummy_env = "env"
+dummy_env = 0
 dummy_unique_id = "unique id"
 stub_exchange_account = MagicMock()
 
@@ -27,7 +26,7 @@ async def test_register_user_exchange_member_log(
     stub_exchange_account.log_schema.assert_called_once_with(dummy_unique_id)
     mocked_persephone.assert_called_once_with(
         topic=dummy_env,
-        partition=PersephoneQueue.OUROINVEST_ONBOARDING.value,
+        partition=dummy_env,
         message=stub_exchange_account.log_schema.return_value,
         schema_name=dummy_env,
     )
@@ -47,7 +46,7 @@ async def test_register_user_exchange_member_log_raising(
     stub_exchange_account.log_schema.assert_called_with(dummy_unique_id)
     mocked_persephone.assert_called_once_with(
         topic=dummy_env,
-        partition=PersephoneQueue.OUROINVEST_ONBOARDING.value,
+        partition=dummy_env,
         message=stub_exchange_account.log_schema.return_value,
         schema_name=dummy_env,
     )
