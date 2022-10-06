@@ -38,7 +38,7 @@ spec:
       MaxScale: 3
       MinScale: 1
       SpecializationTimeout: 120
-      TargetCPUPercent: 0
+      TargetCPUPercent: 80
     StrategyType: execution
   concurrency: 500
   environment:
@@ -51,5 +51,5 @@ spec:
     packageref:
       name: onboarding-ouroinvest-fn-b3ae9ea3-b810-4f6c-8fc3-7352cd5b84ac
       namespace: default
-  requestsPerPod: 1
+  requestsPerPod: 10000
   resources: {}

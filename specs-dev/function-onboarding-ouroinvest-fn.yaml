@@ -51,5 +51,5 @@ spec:
     packageref:
       name: onboarding-ouroinvest-fn-8bc3e57e-c13f-49dd-9b2b-41946bd3fb5a
       namespace: default
-  requestsPerPod: 1
+  requestsPerPod: 100000
   resources: {}
