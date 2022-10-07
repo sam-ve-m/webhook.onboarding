@@ -1,14 +1,14 @@
 include:
 - ./func/*
 kind: ArchiveUploadSpec
-name: func-AK8B
+name: func-lXbG
 
 ---
 apiVersion: fission.io/v1
 kind: Package
 metadata:
   creationTimestamp: null
-  name: onboarding-ouroinvest-fn-8bc3e57e-c13f-49dd-9b2b-41946bd3fb5a
+  name: onboarding-ouroinvest-fn-b3ae9ea3-b810-4f6c-8fc3-7352cd5b84ac
   namespace: default
 spec:
   deployment:
@@ -19,10 +19,10 @@ spec:
   source:
     checksum: {}
     type: url
-    url: archive://func-AK8B
+    url: archive://func-lXbG
 status:
   buildstatus: pending
-  lastUpdateTimestamp: "2022-09-21T13:19:53Z"
+  lastUpdateTimestamp: "2022-10-06T19:02:37Z"
 
 ---
 apiVersion: fission.io/v1
@@ -49,7 +49,7 @@ spec:
   package:
     functionName: main.onboarding_ouroinvest
     packageref:
-      name: onboarding-ouroinvest-fn-8bc3e57e-c13f-49dd-9b2b-41946bd3fb5a
+      name: onboarding-ouroinvest-fn-b3ae9ea3-b810-4f6c-8fc3-7352cd5b84ac
       namespace: default
-  requestsPerPod: 100000
+  requestsPerPod: 10000
   resources: {}
